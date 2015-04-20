@@ -36,8 +36,6 @@ class _screed_record_dict(UserDict.DictMixin):
         if isinstance(idx, slice):
             new_read = _screed_record_dict(self)
             new_read['sequence'] = new_read.sequence[idx]
-            if hasattr(new_read, 'accuracy'):
-                new_read['accuracy'] = new_read.accuracy[idx]
             if hasattr(new_read, 'quality'):
                 new_read['quality'] = new_read.quality[idx]
             return new_read
