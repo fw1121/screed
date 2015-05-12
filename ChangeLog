@@ -1,4 +1,4 @@
-2015-04-18  Michael Wright  <wrigh517@msu.edu>
+2015-05-10  Michael Wright  <wrigh517@msu.edu>
 
    * screedRecord.py: Allow slicing of screed records to fix issue 768
    https://github.com/ged-lab/khmer/issues/768
