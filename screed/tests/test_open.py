@@ -1,17 +1,42 @@
+# Copyright (c) 2008-2015, Michigan State University
+
 import os.path
 import sys
-
+import subprocess
+import screed_tst_utils as utils
 import screed
 import screed.openscreed
 
 
 def test_empty_open():
-    filename = os.path.join(os.path.dirname(__file__), 'empty.fa')
-    assert len(list(iter(screed.open(filename)))) == 0
+    filename = utils.get_test_data('empty.fa')
+    assert len(list(screed.open(filename))) == 0
+
+
+def test_open_maps_dash():
+    """Test mapping of '-'."""
+    #  pylint: disable=protected-access
+    filename = '-'
+    mapped = screed.openscreed._normalize_filename(filename)
+
+    assert '/dev/stdin' == mapped
+
+
+def test_open_stdin():
+    """Test feeding data through stdin.
+
+    Uses a subprocess with the data file directlyused as stdin."""
+    filename1 = utils.get_test_data('test.fa')
+    command = ["python", "-c", "import screed; print list(screed.open('-'))"]
+    with open(filename1, 'rb') as data_file:
+        output = subprocess.Popen(command,
+                                  stdin=data_file,
+                                  stdout=subprocess.PIPE).communicate()[0]
+        assert "'name': 'ENSMICT00000012722'" in output
 
 
 def test_simple_open():
-    filename = os.path.join(os.path.dirname(__file__), 'test.fa')
+    filename = utils.get_test_data('test.fa')
 
     n = -1
     for n, record in enumerate(screed.open(filename)):
@@ -21,7 +46,7 @@ def test_simple_open():
 
 
 def test_simple_open_fq():
-    filename = os.path.join(os.path.dirname(__file__), 'test.fastq')
+    filename = utils.get_test_data('test.fastq')
 
     n = -1
     for n, record in enumerate(screed.open(filename)):
@@ -31,8 +56,8 @@ def test_simple_open_fq():
 
 
 def test_gz_open():
-    filename1 = os.path.join(os.path.dirname(__file__), 'test.fa')
-    filename2 = os.path.join(os.path.dirname(__file__), 'test.fa.gz')
+    filename1 = utils.get_test_data('test.fa')
+    filename2 = utils.get_test_data('test.fa.gz')
     for n, (r1, r2) in enumerate(zip(screed.open(filename1),
                                      screed.open(filename2))):
         assert r1.name == r2.name
@@ -41,8 +66,8 @@ def test_gz_open():
 
 
 def test_bz2_open():
-    filename1 = os.path.join(os.path.dirname(__file__), 'test.fa')
-    filename2 = os.path.join(os.path.dirname(__file__), 'test.fa.bz2')
+    filename1 = utils.get_test_data('test.fa')
+    filename2 = utils.get_test_data('test.fa.bz2')
     for n, (r1, r2) in enumerate(zip(screed.open(filename1),
                                      screed.open(filename2))):
         assert r1.name == r2.name
@@ -51,8 +76,8 @@ def test_bz2_open():
 
 
 def test_gz_open_fastq():
-    filename1 = os.path.join(os.path.dirname(__file__), 'test.fastq')
-    filename2 = os.path.join(os.path.dirname(__file__), 'test.fastq.gz')
+    filename1 = utils.get_test_data('test.fastq')
+    filename2 = utils.get_test_data('test.fastq.gz')
     for n, (r1, r2) in enumerate(zip(screed.open(filename1),
                                      screed.open(filename2))):
         assert r1.name == r2.name
@@ -63,7 +88,7 @@ def test_gz_open_fastq():
 def test_get_writer_class_fasta():
     import screed.fasta
 
-    filename = os.path.join(os.path.dirname(__file__), 'test.fa')
+    filename = utils.get_test_data('test.fa')
 
     read_iter = screed.open(filename)
     x = screed.openscreed.get_writer_class(read_iter)

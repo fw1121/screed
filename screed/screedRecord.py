@@ -5,7 +5,7 @@ import gzip
 import bz2
 
 
-class _screed_record_dict(UserDict.DictMixin):
+class Record(UserDict.DictMixin):
 
     """
     Simple dict-like record interface with bag behavior.
@@ -32,6 +32,7 @@ class _screed_record_dict(UserDict.DictMixin):
     def keys(self):
         return self.d.keys()
 
+<<<<<<< HEAD
     def __getitem__(self, idx):
         if isinstance(idx, slice):
             new_read = _screed_record_dict(self)
@@ -42,6 +43,8 @@ class _screed_record_dict(UserDict.DictMixin):
         else:
             return self.d[idx]
 
+=======
+>>>>>>> c3ae9062314632301b9476218e0988e845c64774
 
 class _screed_attr(object):
 
@@ -136,7 +139,7 @@ class _screed_attr(object):
 
         try:
             return self.__repr__() != str(given)
-        except AttributError:
+        except AttributeError:
             raise TypeError("Cannot compare to given type: %s" % type(given))
 
     def __str__(self):
@@ -191,7 +194,7 @@ def _buildRecord(fieldTuple, dbObj, rowName, queryBy):
         else:
             hackedResult.append((key, value))
 
-    return _screed_record_dict(hackedResult)
+    return Record(hackedResult)
 
 
 class _Writer(object):

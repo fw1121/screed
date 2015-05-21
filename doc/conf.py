@@ -31,7 +31,7 @@ extensions = []
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.txt'
+source_suffix = '.rst'
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -51,6 +51,7 @@ copyright = u'2012-2015, Michigan State University'
 # The full version, including alpha/beta/rc tags.
 
 sys.path.insert(0, '.')
+sys.path.insert(0, '../') # to get the versioneer module
 
 import imp
 fp, pathname, description = imp.find_module('versioneer')
