@@ -32,7 +32,6 @@ class Record(UserDict.DictMixin):
     def keys(self):
         return self.d.keys()
 
-<<<<<<< HEAD
     def __getitem__(self, idx):
         if isinstance(idx, slice):
             new_read = _screed_record_dict(self)
@@ -43,8 +42,6 @@ class Record(UserDict.DictMixin):
         else:
             return self.d[idx]
 
-=======
->>>>>>> c3ae9062314632301b9476218e0988e845c64774
 
 class _screed_attr(object):
 
